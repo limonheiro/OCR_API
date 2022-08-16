@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  backend:
+    image: ocr_fastapi
+
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - test_network
+    volumes:
+      - .:/app
+    tty: true
+    stdin_open: true
+volumes:
+      ocr_fastapi_volume:   
+networks:
+  test_network:
+    driver: bridge
