@@ -1,6 +1,7 @@
 import base64
 from fastapi import FastAPI, File, UploadFile, Request
 import uvicorn
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 import pytesseract as ocr
@@ -10,6 +11,8 @@ from PIL import Image
 
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
@@ -28,17 +31,18 @@ def filter(image: File):
 
 def base64_encode(image, imageFormat):
     _, img_res = cv2.imencode(imageFormat, image)
-    encoded_image_base64 = base64.b64encode(img_res)
+    encoded_image_base64 = base64.b64encode(img_res.tobytes()).decode('utf-8')
+    
     return encoded_image_base64
 
 
 @app.get("/")
 def home(request: Request):
-    return templates.TemplateResponse("layout.html",{"request": request})
+    return templates.TemplateResponse("layout.html", {"request": request})
 
 
-@app.post("/files/")
-async def create_file(file: UploadFile = File(...)):
+@app.post("/")
+async def create_file(request: Request, file: UploadFile = File(...)):
 
     contents = file.file.read()
     contents = np.fromstring(contents, np.uint8)
@@ -50,11 +54,16 @@ async def create_file(file: UploadFile = File(...)):
     gray = filter(image)
 
     phrase = ocr.image_to_string(gray, lang='por')
+    imageFormat = "."+file.filename.split(".")[-1]
+    encoded_image_base64 = base64_encode(image=image, imageFormat=imageFormat)
 
-    encoded_image_base64 = base64.b64encode(base64_encode(
-        image=image, imageFormat="."+file.filename.split(".")[-1]))
-
-    return templates.TemplateResponse("layout.html",{"prase": phrase,"img_input": encoded_image_base64})
+    return templates.TemplateResponse("layout.html",
+                                      {
+                                          "request":request,
+                                          "phrase": phrase,
+                                          "format":imageFormat,
+                                          "img_input": encoded_image_base64
+                                      })
 
 
 @app.post("/uploadfile/")
