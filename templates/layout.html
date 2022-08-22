@@ -25,14 +25,13 @@
     <div class="container bg-light">
         <main role="main" class="container">
             <form method="POST" action="" enctype="multipart/form-data">
-                <h5>Escolha uma imagem para transcrever o texto.</h5>
-                <div class="input-group mb-3">
-                    
-                    <label for="file" class="form-label">
+                <div class=" custom-file-input mb-3">
+                    <label for="file" class="custom-file-input btn btn-outline-secondary">
+                        <h5>Escolha uma imagem para transcrever o texto.</h5>
                     </label>
-                    <input class="form-control w-auto" type="file" name="file" id="file">
+                    <input title="img" class="form-control w-auto" type="file" name="file" style="display:none;" id="file">
                 </div>
-                <button class="btn btn-outline-dark" type="submit">Submit</button>
+                <button class="btn btn-outline-success" type="submit">Submit</button>
             </form>
             {% if phrase %}
             <div class="img-bg">
