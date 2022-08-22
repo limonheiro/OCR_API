@@ -1,3 +1,15 @@
-.img-bg{
-    margin: 20px 0px 0px 0px;
+.img-bg {
+    margin-top: 1em;
+}
+
+#container-nav {
+    margin-bottom: .2em;
+}
+
+h5 {
+    padding-top: .2em;
+}
+
+.container {
+    padding-bottom: .2em;
 }

@@ -1,8 +1,12 @@
 import base64
+from cmath import phase
+from html.parser import HTMLParser
 from fastapi import FastAPI, File, UploadFile, Request
 import uvicorn
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
 
 import pytesseract as ocr
 import numpy as np
@@ -54,12 +58,16 @@ async def create_file(request: Request, file: UploadFile = File(...)):
     gray = filter(image)
 
     phrase = ocr.image_to_string(gray, lang='por')
+    phrase = phrase.split("\n")
     imageFormat = "."+file.filename.split(".")[-1]
     encoded_image_base64 = base64_encode(image=image, imageFormat=imageFormat)
 
+    # phrase=phrase.replace("\n", "</br>")
+    # print(phrase)
+
     return templates.TemplateResponse("layout.html",
                                       {
-                                          "request":request,
+                                          "request": request,
                                           "phrase": phrase,
                                           "format":imageFormat,
                                           "img_input": encoded_image_base64
