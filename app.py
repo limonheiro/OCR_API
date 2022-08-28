@@ -5,7 +5,7 @@ from fastapi import FastAPI, File, UploadFile, Request
 import uvicorn
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from starlette.responses import FileResponse
 
 
 import pytesseract as ocr
@@ -39,11 +39,13 @@ def base64_encode(image, imageFormat):
     
     return encoded_image_base64
 
+@app.get('/favicon.ico')
+async def favicon():
+    return FileResponse("favicon.ico")
 
 @app.get("/")
 def home(request: Request):
     return templates.TemplateResponse("layout.html", {"request": request})
-
 
 @app.post("/")
 async def create_file(request: Request, file: UploadFile = File(...)):
@@ -65,7 +67,7 @@ async def create_file(request: Request, file: UploadFile = File(...)):
     # phrase=phrase.replace("\n", "</br>")
     # print(phrase)
 
-    return templates.TemplateResponse("layout.html",
+    return templates.TemplateResponse("result.html",
                                       {
                                           "request": request,
                                           "phrase": phrase,

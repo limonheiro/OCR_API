@@ -1,6 +1,14 @@
-<a>
-    {% if phrase%}
-    <h3>Frase:<h3> </br>
-    {{phrase}}
+{% extends "layout.html" %}
+
+{% block result %}
+
+    {% if phrase %}
+        <div class="img-bg">
+            <img src="data:image/{{format}};charset=utf-8;base64,{{img_input}}" />
+            {% for p in phrase %}
+                <p>{{ p }}</p>
+            {% endfor %}
+        </div>
     {% endif %}
-</a>
+
+{% endblock %}
