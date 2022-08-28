@@ -10,5 +10,5 @@ RUN apt-get update &&\
 
 FROM base as app
 WORKDIR /app
-COPY ./app/ /app
-RUN pip3 install --no-cache-dir pytesseract opencv-python pillow
+COPY . /app
+RUN pip3 install --no-cache-dir --no-cache-dir -r req.txt
