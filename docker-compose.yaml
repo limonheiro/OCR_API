@@ -3,7 +3,7 @@ version: "3"
 services:
   backend:
     image: ocr_fastapi
-
+    command: python3 app.py
     build:
       context: .
       dockerfile: ./Dockerfile
