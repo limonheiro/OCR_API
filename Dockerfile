@@ -1,5 +1,5 @@
 #reference: https://github.com/ricktorzynski/ocr-tesseract-docker/blob/master/Dockerfile
-FROM ubuntu:22.04 as base
+FROM alpine as base
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update &&\
